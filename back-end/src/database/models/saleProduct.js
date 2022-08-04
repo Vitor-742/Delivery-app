@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define(
+  const SalesProducts = sequelize.define(
     "SalesProducts",
     {
       saleId: {
