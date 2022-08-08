@@ -1,0 +1,21 @@
+button {
+  height: 40px;
+  width: 250px;
+  border-radius: 7px;
+  color: #fff;
+  font-size: 1.3em;
+}
+
+.btn_green {
+  background-color: #1f6b52;
+}
+
+.btn_lightgreen {
+  background-color: #40c18c;
+}
+
+.btn_light {
+  background-color: transparent;
+  border: solid 1px #1f6b52;
+  color: #1f6b52;
+}
