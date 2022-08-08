@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import rockGlass from './images/rockGlass.svg';
-import Register from './pages/register/Register';
 
 function App() {
   return (
@@ -10,7 +9,6 @@ function App() {
       <object className="rocksGlass" type="image/svg+xml" data={ rockGlass }>
         Glass
       </object>
-      <Register />
     </div>
   );
 }
