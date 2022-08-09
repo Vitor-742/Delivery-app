@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import registerValidate from '../utils/registerValidate';
 
 export default function CommonRegister() {
   const [inputs, setInputs] = useState({ name: '', email: '', password: '' });
@@ -42,6 +43,11 @@ export default function CommonRegister() {
           type="submit"
           data-testid="common_register__button-register"
           onClick={ () => console.log(inputs) }
+          disabled={ registerValidate(
+            inputs.name,
+            inputs.email,
+            inputs.password,
+          ) }
         >
           CADASTRAR
         </button>
