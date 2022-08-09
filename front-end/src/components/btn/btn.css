@@ -1,9 +1,9 @@
 button {
+  border-radius: 7px;
+  color: white;
+  font-size: 1.3em;
   height: 40px;
   width: 250px;
-  border-radius: 7px;
-  color: #fff;
-  font-size: 1.3em;
 }
 
 .btn_green {
