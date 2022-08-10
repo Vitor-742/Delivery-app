@@ -1,17 +1,34 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 
 const MIN_LENGTH_PASSWORD = 5;
 
 export default function CommonLogin() {
   const [inputs, setInputs] = useState({ email: '', password: '' });
   const [disableLogin, setDisablelogin] = useState(false);
+  const [incorrectLogin, setIncorrectLogin] = useState(false)
 
   const history = useHistory();
 
   function handleClick() {
     history.push('/register');
   }
+
+  const getUser = async () => {
+    try {
+      console.log(inputs)
+      const { status } = await axios({
+        method: 'post',
+        url: 'http://localhost:3001/login',
+        data: inputs,
+      });
+      console.log(status);
+    } catch (error) {
+      console.log(error)
+      setIncorrectLogin(true)
+    }
+  };
 
   const ableBtnLogin = () => {
     const reg = /\S+@\S+\.\S+/;
@@ -55,7 +72,7 @@ export default function CommonLogin() {
           type="button"
           data-testid="common_login__button-login"
           disabled={ !disableLogin }
-          onClick={ () => getUser() }
+          onClick={ async () => getUser() }
         >
           Login
         </button>
@@ -66,7 +83,12 @@ export default function CommonLogin() {
         >
           Ainda não tenho conta
         </button>
-        <span data-testid="common_login__element-invalid-email" />
+        {incorrectLogin &&
+          <span data-testid="common_login__element-invalid-email">
+            email ou senha incorreto
+          </span>
+        }
+        
       </form>
     </div>
   );
