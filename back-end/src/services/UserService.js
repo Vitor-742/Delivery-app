@@ -3,8 +3,6 @@ const { User } = require('../database/models');
 
 const login = async ({ email, password }) => {
     const user = await User.findOne({ where: { email, password: md5(password) } });
-    console.log(email)
-    console.log(user)
     if (!user) throw new Error('User Not Found');
     return user;
 };
