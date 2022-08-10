@@ -7,7 +7,7 @@ const MIN_LENGTH_PASSWORD = 5;
 export default function CommonLogin() {
   const [inputs, setInputs] = useState({ email: '', password: '' });
   const [disableLogin, setDisablelogin] = useState(false);
-  const [incorrectLogin, setIncorrectLogin] = useState(false)
+  const [incorrectLogin, setIncorrectLogin] = useState(false);
 
   const history = useHistory();
 
@@ -17,7 +17,7 @@ export default function CommonLogin() {
 
   const getUser = async () => {
     try {
-      console.log(inputs)
+      console.log(inputs);
       const { status } = await axios({
         method: 'post',
         url: 'http://localhost:3001/login',
@@ -25,8 +25,8 @@ export default function CommonLogin() {
       });
       console.log(status);
     } catch (error) {
-      console.log(error)
-      setIncorrectLogin(true)
+      console.log(error);
+      setIncorrectLogin(true);
     }
   };
 
@@ -83,12 +83,13 @@ export default function CommonLogin() {
         >
           Ainda não tenho conta
         </button>
-        {incorrectLogin &&
+        {
+          incorrectLogin
+        &&
           <span data-testid="common_login__element-invalid-email">
             email ou senha incorreto
           </span>
         }
-        
       </form>
     </div>
   );
