@@ -1,14 +1,47 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
+
+const MIN_LENGTH_PASSWORD = 5;
 
 export default function CommonLogin() {
   const [inputs, setInputs] = useState({ email: '', password: '' });
+  const [disableLogin, setDisablelogin] = useState(false);
+  const [incorrectLogin, setIncorrectLogin] = useState(false);
+  const STATUS_OK = 200;
 
   const history = useHistory();
 
   function handleClick() {
     history.push('/register');
   }
+
+  const getUser = async () => {
+    try {
+      console.log(inputs);
+      const { status } = await axios({
+        method: 'post',
+        url: 'http://localhost:3001/login',
+        data: inputs,
+      });
+      if (status === STATUS_OK) history.push('./customer/products');
+    } catch (error) {
+      console.log(error);
+      setIncorrectLogin(true);
+    }
+  };
+
+  const ableBtnLogin = () => {
+    const reg = /\S+@\S+\.\S+/;
+    if (
+      reg.test(inputs.email)
+      && inputs.password.length >= MIN_LENGTH_PASSWORD
+    ) {
+      setDisablelogin(true);
+    } else {
+      setDisablelogin(false);
+    }
+  };
 
   return (
     <div className="login-container">
@@ -19,7 +52,10 @@ export default function CommonLogin() {
             type="text"
             name="login"
             data-testid="common_login__input-email"
-            onChange={ (e) => setInputs({ ...inputs, email: e.target.value }) }
+            onChange={ (e) => {
+              setInputs({ ...inputs, email: e.target.value });
+              ableBtnLogin();
+            } }
             value={ inputs.email }
           />
         </label>
@@ -29,11 +65,19 @@ export default function CommonLogin() {
             type="password"
             name="senha"
             data-testid="common_login__input-password"
-            onChange={ (e) => setInputs({ ...inputs, password: e.target.value }) }
+            onChange={ (e) => {
+              setInputs({ ...inputs, password: e.target.value });
+              ableBtnLogin();
+            } }
             value={ inputs.password }
           />
         </label>
-        <button data-testid="common_login__button-login" type="button">
+        <button
+          type="button"
+          data-testid="common_login__button-login"
+          disabled={ !disableLogin }
+          onClick={ async () => getUser() }
+        >
           Login
         </button>
         <button
@@ -43,7 +87,11 @@ export default function CommonLogin() {
         >
           Ainda não tenho conta
         </button>
-        <span data-testid="common_login__element-invalid-email" />
+        {incorrectLogin && (
+          <span data-testid="common_login__element-invalid-email">
+            email ou senha incorreto
+          </span>
+        )}
       </form>
     </div>
   );

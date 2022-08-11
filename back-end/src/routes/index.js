@@ -1,8 +1,4 @@
-import { Router } from 'express';
-import loginRouter from './loginRouter';
+const userRouter = require('./userRouter');
+const customerRouter = require('./customerRouter');
 
-const router = Router();
-
-router.use('/login', loginRouter);
-
-export default router;
+module.exports = { userRouter, customerRouter };
