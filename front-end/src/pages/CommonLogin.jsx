@@ -8,6 +8,7 @@ export default function CommonLogin() {
   const [inputs, setInputs] = useState({ email: '', password: '' });
   const [disableLogin, setDisablelogin] = useState(false);
   const [incorrectLogin, setIncorrectLogin] = useState(false);
+  const STATUS_OK = 200;
 
   const history = useHistory();
 
@@ -23,7 +24,7 @@ export default function CommonLogin() {
         url: 'http://localhost:3001/login',
         data: inputs,
       });
-      if(status === 200) history.push('./customer/products')
+      if (status === STATUS_OK) history.push('./customer/products');
     } catch (error) {
       console.log(error);
       setIncorrectLogin(true);
@@ -32,7 +33,10 @@ export default function CommonLogin() {
 
   const ableBtnLogin = () => {
     const reg = /\S+@\S+\.\S+/;
-    if (reg.test(inputs.email) && inputs.password.length >= MIN_LENGTH_PASSWORD) {
+    if (
+      reg.test(inputs.email)
+      && inputs.password.length >= MIN_LENGTH_PASSWORD
+    ) {
       setDisablelogin(true);
     } else {
       setDisablelogin(false);
@@ -83,13 +87,11 @@ export default function CommonLogin() {
         >
           Ainda não tenho conta
         </button>
-        {
-          incorrectLogin
-        &&
+        {incorrectLogin && (
           <span data-testid="common_login__element-invalid-email">
             email ou senha incorreto
           </span>
-        }
+        )}
       </form>
     </div>
   );
