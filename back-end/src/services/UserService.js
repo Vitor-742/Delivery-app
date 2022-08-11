@@ -1,8 +1,8 @@
 const md5 = require('md5');
-const { User } = require('../database/models');
+const { Users } = require('../database/models');
 
 const login = async ({ email, password }) => {
-    const user = await User.findOne({ where: { email, password: md5(password) } });
+    const user = await Users.findOne({ where: { email, password: md5(password) } });
     if (!user) throw new Error('User Not Found');
     return user;
 };

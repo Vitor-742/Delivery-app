@@ -23,7 +23,7 @@ export default function CommonLogin() {
         url: 'http://localhost:3001/login',
         data: inputs,
       });
-      console.log(status);
+      if(status === 200) history.push('./customer/products')
     } catch (error) {
       console.log(error);
       setIncorrectLogin(true);

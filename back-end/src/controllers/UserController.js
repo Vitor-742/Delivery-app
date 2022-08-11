@@ -6,8 +6,7 @@ const loginRouter = async (req, res) => {
         const response = await UserService.login(body);
         return res.status(200).json(response);
     } catch (error) {
-        console.log(error)
-        return res.status(404).end();
+        return res.status(404).json({message: error.message});
     }
 };
 
