@@ -39,8 +39,8 @@ export default function CommonLogin() {
   const ableBtnLogin = () => {
     const reg = /\S+@\S+\.\S+/;
     if (
-      reg.test(inputs.email) &&
-      inputs.password.length >= MIN_LENGTH_PASSWORD
+      reg.test(inputs.email)
+      && inputs.password.length >= MIN_LENGTH_PASSWORD
     ) {
       setDisablelogin(true);
     } else {
@@ -57,10 +57,10 @@ export default function CommonLogin() {
             type="text"
             name="login"
             data-testid="common_login__input-email"
-            onChange={(e) => {
+            onChange={ (e) => {
               setInputs({ ...inputs, email: e.target.value });
               ableBtnLogin();
-            }}
+            } }
             value={ inputs.email }
           />
         </label>
@@ -70,10 +70,10 @@ export default function CommonLogin() {
             type="password"
             name="senha"
             data-testid="common_login__input-password"
-            onChange={(e) => {
+            onChange={ (e) => {
               setInputs({ ...inputs, password: e.target.value });
               ableBtnLogin();
-            }}
+            } }
             value={ inputs.password }
           />
         </label>
