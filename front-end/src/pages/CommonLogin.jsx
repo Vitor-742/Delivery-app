@@ -24,7 +24,12 @@ export default function CommonLogin() {
         url: 'http://localhost:3001/login',
         data: inputs,
       });
-      if (status === STATUS_OK) history.push('./customer/products');
+      if (status === STATUS_OK && inputs.email === 'adm@deliveryapp.com') {
+        history.push('./admin/manage');
+      }
+      if (status === STATUS_OK && inputs.email !== 'adm@deliveryapp.com') {
+        history.push('./customer/products');
+      }
     } catch (error) {
       console.log(error);
       setIncorrectLogin(true);
@@ -87,7 +92,7 @@ export default function CommonLogin() {
         >
           Ainda não tenho conta
         </button>
-        {incorrectLogin && (
+        { incorrectLogin && (
           <span data-testid="common_login__element-invalid-email">
             email ou senha incorreto
           </span>
