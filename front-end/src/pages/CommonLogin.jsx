@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import axios from "axios";
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 
 const MIN_LENGTH_PASSWORD = 5;
 
@@ -20,15 +20,15 @@ export default function CommonLogin() {
     try {
       console.log(inputs);
       const { status } = await axios({
-        method: "post",
-        url: "http://localhost:3001/login",
+        method: 'post',
+        url: 'http://localhost:3001/login',
         data: inputs,
       });
-      if (status === STATUS_OK && inputs.email === "adm@deliveryapp.com") {
-        history.push("./admin/manage");
+      if (status === STATUS_OK && inputs.email === 'adm@deliveryapp.com') {
+        history.push('./admin/manage');
       }
-      if (status === STATUS_OK && inputs.email !== "adm@deliveryapp.com") {
-        history.push("./customer/products");
+      if (status === STATUS_OK && inputs.email !== 'adm@deliveryapp.com') {
+        history.push('./customer/products');
       }
     } catch (error) {
       console.log(error);
@@ -49,51 +49,51 @@ export default function CommonLogin() {
   };
 
   return (
-    <div className="login-container">
-      <form className="login-form">
-        <label htmlFor="login">
+    <div className='login-container'>
+      <form className='login-form'>
+        <label htmlFor='login'>
           Login
           <input
-            type="text"
-            name="login"
-            data-testid="common_login__input-email"
+            type='text'
+            name='login'
+            data-testid='common_login__input-email'
             onChange={(e) => {
               setInputs({ ...inputs, email: e.target.value });
               ableBtnLogin();
             }}
-            value={inputs.email}
+            value={ inputs.email }
           />
         </label>
-        <label htmlFor="senha">
+        <label htmlFor='senha'>
           Senha
           <input
-            type="password"
-            name="senha"
-            data-testid="common_login__input-password"
+            type='password'
+            name='senha'
+            data-testid='common_login__input-password'
             onChange={(e) => {
               setInputs({ ...inputs, password: e.target.value });
               ableBtnLogin();
             }}
-            value={inputs.password}
+            value={ inputs.password }
           />
         </label>
         <button
-          type="button"
-          data-testid="common_login__button-login"
-          disabled={!disableLogin}
-          onClick={async () => getUser()}
+          type='button'
+          data-testid='common_login__button-login'
+          disabled={ !disableLogin }
+          onClick={ async () => getUser() }
         >
           Login
         </button>
         <button
-          data-testid="common_login__button-register"
-          type="button"
-          onClick={handleClick}
+          data-testid='common_login__button-register'
+          type='button'
+          onClick={ handleClick }
         >
           Ainda não tenho conta
         </button>
-        {incorrectLogin && (
-          <span data-testid="common_login__element-invalid-email">
+        { incorrectLogin && (
+          <span data-testid='common_login__element-invalid-email'>
             email ou senha incorreto
           </span>
         )}
