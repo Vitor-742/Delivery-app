@@ -1,5 +1,6 @@
 const md5 = require('md5');
 const jwt = require('jsonwebtoken')
+const newJWT = require('../auth/tokenHandler');
 const { Users } = require('../database/models');
 const errorCreator = require('../helpers/errorCreator');
 const jwtKey = require("fs")
@@ -17,11 +18,26 @@ const login = async ({ email, password: unCryptPass }) => {
   throw errorCreator(404, 'User Not Found');
 };
 
-// const readSecret = async () => {
-//   const readFile = await fs.readFile('./back-end/jwt.evaluation.key');
-//   return readFile
-// }
+const signUp = async (newUser) => {
+  const cryptPass = md5(newUser.password);
+  const createdUser = await Users.create({
+    name: newUser.name,
+    email: newUser.email,
+    password: cryptPass,
+    role: 'customer',
+  });
+
+  const tokenPayload = {
+    id: createdUser.id,
+    name: newUser.name,
+    email: newUser.email,
+    role: 'customer',
+  };
+  const token = newJWT(tokenPayload);
+  return { name: newUser.name, email: newUser.email, role: 'customer', token };
+};
 
 module.exports = {
   login,
+  signUp,
 };

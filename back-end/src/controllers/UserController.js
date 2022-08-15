@@ -5,9 +5,19 @@ const login = async (req, res, next) => {
     const response = await UserService.login(req.body);
     return res.status(200).json(response);
   } catch (err) {
-    console.log(err);
     next(err);
   }
 };
 
-module.exports = { login };
+const signUp = async (req, res, next) => {
+  try {
+    const { ...bodyData } = req.body;
+    const newUserData = { ...bodyData };
+    const createdUser = await UserService.signUp(newUserData);
+    return res.status(201).json(createdUser);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { login, signUp };

@@ -1,8 +1,54 @@
-import React, { useState } from 'react';
-import registerValidate from '../utils/registerValidate';
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 
 export default function CommonRegister() {
-  const [inputs, setInputs] = useState({ name: '', email: '', password: '' });
+  const history = useHistory();
+  const MIN_NAME_LENGTH = 12;
+  const emailRegex = /\S+@\S+\.\S+/;
+  const MIN_PASSWORD_LENGTH = 6;
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const validateName = name.length >= MIN_NAME_LENGTH;
+  const validateEmail = emailRegex.test(email);
+  const validatePassword = password.length >= MIN_PASSWORD_LENGTH;
+  const [isDisabled, setDisabled] = useState(false);
+  const [invalidRegister, setInvalidRegister] = useState(false);
+
+  const handleSubmitBtn = () => {
+    if (validateName && validateEmail && validatePassword) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
+  };
+
+  const axiosInstance = axios.create({
+    baseURL: 'http://localhost:3001/',
+  });
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      setInvalidRegister(false);
+      const { data } = await axiosInstance.post('/register', {
+        name,
+        email,
+        password,
+      });
+      localStorage.setItem('user', JSON.stringify(data));
+      history.push('/customer/products');
+    } catch (err) {
+      setInvalidRegister(true);
+    }
+  };
+
+  useEffect(() => {
+    handleSubmitBtn();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name, email, password]);
+
   return (
     <div className="login-container">
       <form className="login-form">
@@ -13,8 +59,7 @@ export default function CommonRegister() {
             name="name"
             id="name"
             data-testid="common_register__input-name"
-            onChange={ (e) => setInputs({ ...inputs, name: e.target.value }) }
-            value={ inputs.name }
+            onChange={ (e) => setName(e.target.value) }
           />
         </label>
         <label htmlFor="email">
@@ -24,8 +69,7 @@ export default function CommonRegister() {
             name="email"
             id="email"
             data-testid="common_register__input-email"
-            onChange={ (e) => setInputs({ ...inputs, email: e.target.value }) }
-            value={ inputs.email }
+            onChange={ (e) => setEmail(e.target.value) }
           />
         </label>
         <label htmlFor="password">
@@ -35,23 +79,22 @@ export default function CommonRegister() {
             name="password"
             id="password"
             data-testid="common_register__input-password"
-            onChange={ (e) => setInputs({ ...inputs, password: e.target.value }) }
-            value={ inputs.password }
+            onChange={ (e) => setPassword(e.target.value) }
           />
         </label>
         <button
-          type="submit"
+          type="button"
           data-testid="common_register__button-register"
-          onClick={ () => console.log(inputs) }
-          disabled={ registerValidate(
-            inputs.name,
-            inputs.email,
-            inputs.password,
-          ) }
+          onClick={ (e) => handleSubmit(e) }
+          disabled={ isDisabled }
         >
           CADASTRAR
         </button>
-        <span data-testid="common_register__element-invalid_register" />
+        {invalidRegister && (
+          <span data-testid="common_register__element-invalid_register">
+            Um usuário já existe com esse email!
+          </span>
+        )}
       </form>
     </div>
   );
