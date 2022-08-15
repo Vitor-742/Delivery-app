@@ -1,6 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function NavBar() {
+  const {name} = JSON.parse(localStorage.getItem('user'))
+  const logout = () => {
+    localStorage.removeItem('user')
+  }
   return (
     <nav>
       <ul>
@@ -11,11 +16,13 @@ export default function NavBar() {
           Pedidos
         </li>
         <li data-testid="customer_products__element-navbar-user-full-name">
-          Usuário
+          {name}
         </li>
-        <li data-testid="customer_products__element-navbar-link-logout">
+        <Link to="/login">
+          <li data-testid="customer_products__element-navbar-link-logout" onClick={logout}>
           Sair
         </li>
+        </Link>
       </ul>
     </nav>
   );
