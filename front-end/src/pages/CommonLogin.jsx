@@ -18,7 +18,7 @@ export default function CommonLogin() {
 
   useEffect(() => {
 
-  }, [])
+  }, []);
 
   const getUser = async () => {
     try {
@@ -28,7 +28,7 @@ export default function CommonLogin() {
         url: 'http://localhost:3001/login',
         data: inputs,
       });
-      localStorage.setItem('user', JSON.stringify({ name, email, role, token }))
+      localStorage.setItem('user', JSON.stringify({ name, email, role, token }));
       if (status === STATUS_OK) history.push('./customer/products');
       if (status === STATUS_OK && inputs.email === 'adm@deliveryapp.com') {
         history.push('./admin/manage');
