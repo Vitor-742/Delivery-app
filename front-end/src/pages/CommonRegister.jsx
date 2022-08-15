@@ -91,9 +91,9 @@ export default function CommonRegister() {
           CADASTRAR
         </button>
         {invalidRegister && (
-          <p data-testid="common_register__element-invalid_register">
-            revise dados e tente novamente
-          </p>
+          <span data-testid="common_register__element-invalid_register">
+            Um usuário já existe com esse email!
+          </span>
         )}
       </form>
     </div>
