@@ -5,7 +5,7 @@ import axios from 'axios';
 export default function CommonRegister() {
   const history = useHistory();
   const MIN_NAME_LENGTH = 12;
-  const emailRegex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/i;
+  const emailRegex = /\S+@\S+\.\S+/;
   const MIN_PASSWORD_LENGTH = 6;
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
