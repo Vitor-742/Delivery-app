@@ -6,8 +6,17 @@ export default function CardProduct({
   name = 'PlaceHolder',
   image = 'http://localhost:3001/images/heineken_600ml.jpg',
   price = 100,
+  func,
 }) {
   const [quantity, setQuantity] = useState(0);
+  const updateLS = (quant) => {
+    const cart = JSON.parse(localStorage.getItem('carrinho'));
+    const cartWithoutItem = cart.filter((i) => i.id !== id);
+    cartWithoutItem.push({ name, quant, price, id });
+    localStorage.setItem('carrinho', JSON.stringify(cartWithoutItem));
+    func(cartWithoutItem);
+  };
+
   return (
     <div>
       <h4 data-testid={ `customer_products__element-card-title-${id}` }>
@@ -23,7 +32,9 @@ export default function CardProduct({
           type="button"
           onClick={ () => {
             setQuantity((prevValue) => {
+              if (prevValue === 0) return 0;
               const updatedValue = prevValue - 1;
+              updateLS(updatedValue);
               return updatedValue;
             });
           } }
@@ -42,6 +53,7 @@ export default function CardProduct({
           onClick={ () => {
             setQuantity((prevValue) => {
               const updatedValue = prevValue + 1;
+              updateLS(updatedValue);
               return updatedValue;
             });
           } }
