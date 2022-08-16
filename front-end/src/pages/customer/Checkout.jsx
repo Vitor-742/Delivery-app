@@ -4,7 +4,7 @@ import NavBar from '../../components/NavBar/NavBar';
 export default function Checkout() {
   const [allCartProducts, setCartProducts] = useState([]);
   useState(() => {
-    setCartProducts(JSON.parse(localStorage.getItem('carrinho')));
+    setCartProducts(JSON.parse(localStorage.getItem('cart')));
   }, []);
 
   return (
@@ -35,7 +35,7 @@ export default function Checkout() {
                 `customer_checkout__element-order-table-sub-total-${ind}`
               }
             >
-              {(parseFloat(product.price) * product.quant).toFixed(2)}
+              {(parseFloat(product.price) * product.quantity).toFixed(2)}
             </p>
             <p data-testid={ `customer_checkout__element-order-table-remove-${ind}` }>
               Remover
@@ -43,7 +43,7 @@ export default function Checkout() {
           </div>))}
         <span data-testid="customer_checkout__element-order-total-price">
           {allCartProducts
-            .reduce((acc, item) => item.quant * parseFloat(item.price) + acc, 0)
+            .reduce((acc, item) => item.quantity * parseFloat(item.price) + acc, 0)
             .toFixed(2)
             .replace('.', ',')}
         </span>

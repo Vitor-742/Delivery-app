@@ -1,7 +1,7 @@
 import React from 'react';
 import CardProduct from '../CardProduct/CardProduct';
 
-export default function ListProducts({ data: allProducts, func: setCart }) {
+export default function ListProducts({ data: allProducts }) {
   return (
     allProducts.length > 0
     && allProducts.map(({ id, name, url_image: image, price }, i) => (
@@ -11,7 +11,6 @@ export default function ListProducts({ data: allProducts, func: setCart }) {
         name={ name }
         image={ image }
         price={ price }
-        func={ setCart }
       />
     ))
   );

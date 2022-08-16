@@ -6,16 +6,47 @@ export default function CardProduct({
   name = 'PlaceHolder',
   image = 'http://localhost:3001/images/heineken_600ml.jpg',
   price = 100,
-  func,
 }) {
   const [quantity, setQuantity] = useState(0);
   const updateLS = (quant) => {
-    const cart = JSON.parse(localStorage.getItem('carrinho'));
+    const cart = JSON.parse(localStorage.getItem('cart'));
     const cartWithoutItem = cart.filter((i) => i.id !== id);
-    cartWithoutItem.push({ name, quant, price, id });
-    localStorage.setItem('carrinho', JSON.stringify(cartWithoutItem));
-    func(cartWithoutItem);
+    cartWithoutItem.push({ name, quantity: quant, price, id });
+    localStorage.setItem('cart', JSON.stringify(cartWithoutItem));
   };
+
+  function localCart(value) {
+    let cart = JSON.parse(localStorage.getItem('cart'));
+
+    if (value === 0) {
+      cart = cart.filter((e) => e.id !== id);
+      localStorage.setItem('cart', JSON.stringify(cart));
+    } else {
+      const exists = cart.some((e) => e.id === id);
+      if (exists) {
+        cart = cart.map((e) => {
+          if (e.id === id) {
+            e.quantity = value;
+            return e;
+          }
+          return e;
+        });
+        console.log(cart);
+      } else {
+        cart.push({ id, product: name, quantity: value, price });
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+  }
+
+  function handleQuantity(value) {
+    if (value >= 0) {
+      localCart(value);
+      window.dispatchEvent(new Event('storage'));
+      updateLS(value);
+      setQuantity(value);
+    }
+  }
 
   return (
     <div>
@@ -30,14 +61,15 @@ export default function CardProduct({
       <div>
         <button
           type="button"
-          onClick={ () => {
-            setQuantity((prevValue) => {
-              if (prevValue === 0) return 0;
-              const updatedValue = prevValue - 1;
-              updateLS(updatedValue);
-              return updatedValue;
-            });
-          } }
+          // onClick={ () => {
+          //   setQuantity((prevValue) => {
+          //     if (prevValue === 0) return 0;
+          //     const updatedValue = prevValue - 1;
+          //     updateLS(updatedValue);
+          //     return updatedValue;
+          //   });
+          // } }
+          onClick={ () => handleQuantity(quantity - 1) }
           data-testid={ `customer_products__button-card-rm-item-${id}` }
         >
           -
@@ -45,18 +77,19 @@ export default function CardProduct({
         <input
           type="text"
           value={ quantity }
-          readOnly
+          onChange={ ({ target }) => handleQuantity(target.value) }
           data-testid={ `customer_products__input-card-quantity-${id}` }
         />
         <button
           type="button"
-          onClick={ () => {
-            setQuantity((prevValue) => {
-              const updatedValue = prevValue + 1;
-              updateLS(updatedValue);
-              return updatedValue;
-            });
-          } }
+          // onClick={ () => {
+          //   setQuantity((prevValue) => {
+          //     const updatedValue = prevValue + 1;
+          //     updateLS(updatedValue);
+          //     return updatedValue;
+          //   });
+          // } }
+          onClick={ () => handleQuantity(quantity + 1) }
           data-testid={ `customer_products__button-card-add-item-${id}` }
         >
           +
