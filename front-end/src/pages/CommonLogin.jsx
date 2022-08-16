@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
@@ -16,20 +16,24 @@ export default function CommonLogin() {
     history.push('/register');
   }
 
+  useEffect(() => {
+
+  }, []);
+
   const getUser = async () => {
     try {
       console.log(inputs);
-      const { status } = await axios({
+      const { status, data: { name, email, role, token } } = await axios({
         method: 'post',
         url: 'http://localhost:3001/login',
         data: inputs,
       });
+      localStorage.setItem('user', JSON.stringify({ name, email, role, token }));
       if (status === STATUS_OK && inputs.email === 'adm@deliveryapp.com') {
         history.push('./admin/manage');
-      }
-      if (status === STATUS_OK && inputs.email !== 'adm@deliveryapp.com') {
+      } else if (status === STATUS_OK && inputs.email !== 'adm@deliveryapp.com') {
         history.push('./customer/products');
-      }
+      } else if (status === STATUS_OK) history.push('./customer/products');
     } catch (error) {
       console.log(error);
       setIncorrectLogin(true);
