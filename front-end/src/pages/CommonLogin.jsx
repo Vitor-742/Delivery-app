@@ -29,11 +29,11 @@ export default function CommonLogin() {
         data: inputs,
       });
       localStorage.setItem('user', JSON.stringify({ name, email, role, token }));
-      if (status === STATUS_OK) history.push('./customer/products');
-      if (status === STATUS_OK && inputs.email === 'adm@deliveryapp.com') {
+      if (status === STATUS_OK) history.push('./customer/products')
+      else if (status === STATUS_OK && inputs.email === 'adm@deliveryapp.com') {
         history.push('./admin/manage');
       }
-      if (status === STATUS_OK && inputs.email !== 'adm@deliveryapp.com') {
+      else if (status === STATUS_OK && inputs.email !== 'adm@deliveryapp.com') {
         history.push('./customer/products');
       }
     } catch (error) {
