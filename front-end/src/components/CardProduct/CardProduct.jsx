@@ -8,6 +8,39 @@ export default function CardProduct({
   price = 100,
 }) {
   const [quantity, setQuantity] = useState(0);
+
+  function localCart(value) {
+    let cart = JSON.parse(localStorage.getItem('cart'));
+
+    if (value === 0) {
+      cart = cart.filter((e) => e.id !== id);
+      localStorage.setItem('cart', JSON.stringify(cart));
+    } else {
+      const exists = cart.some((e) => e.id === id);
+      if (exists) {
+        cart = cart.map((e) => {
+          if (e.id === id) {
+            e.quantity = value;
+            return e;
+          }
+          return e;
+        });
+        console.log(cart);
+      } else {
+        cart.push({ id, product: name, quantity: value, price });
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+  }
+
+  function handleQuantity(value) {
+    if (value >= 0) {
+      localCart(value);
+      window.dispatchEvent(new Event('storage'));
+      setQuantity(value);
+    }
+  }
+
   return (
     <div>
       <h4 data-testid={ `customer_products__element-card-title-${id}` }>
@@ -21,12 +54,7 @@ export default function CardProduct({
       <div>
         <button
           type="button"
-          onClick={ () => {
-            setQuantity((prevValue) => {
-              const updatedValue = prevValue - 1;
-              return updatedValue;
-            });
-          } }
+          onClick={ () => handleQuantity(quantity - 1) }
           data-testid={ `customer_products__button-card-rm-item-${id}` }
         >
           -
@@ -34,17 +62,12 @@ export default function CardProduct({
         <input
           type="text"
           value={ quantity }
-          readOnly
+          onChange={ ({ target }) => handleQuantity(target.value) }
           data-testid={ `customer_products__input-card-quantity-${id}` }
         />
         <button
           type="button"
-          onClick={ () => {
-            setQuantity((prevValue) => {
-              const updatedValue = prevValue + 1;
-              return updatedValue;
-            });
-          } }
+          onClick={ () => handleQuantity(quantity + 1) }
           data-testid={ `customer_products__button-card-add-item-${id}` }
         >
           +
