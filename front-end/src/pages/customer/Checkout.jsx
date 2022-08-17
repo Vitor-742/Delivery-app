@@ -17,43 +17,51 @@ export default function Checkout() {
             <p
               data-testid={ `customer_checkout__element-order-table-item-number-${ind}` }
             >
-              {ind}
+              {ind + 1}
             </p>
-            <p data-testid={ `customer_checkout__element-order-table-name-${ind}` }>
+            <p
+              data-testid={ `customer_checkout__element-order-table-name-${ind}` }
+            >
               {product.name}
             </p>
-            <p data-testid={ `customer_checkout__element-order-table-quantity-${ind}` }>
+            <p
+              data-testid={ `customer_checkout__element-order-table-quantity-${ind}` }
+            >
               {product.quantity}
             </p>
             <p
               data-testid={ `customer_checkout__element-order-table-unit-price-${ind}` }
             >
-              {product.price}
+              {product.price.toString().replace(/\./, ',')}
             </p>
             <p
-              data-testid={
-                `customer_checkout__element-order-table-sub-total-${ind}`
-              }
+              data-testid={ `customer_checkout__element-order-table-sub-total-${ind}` }
             >
-              {(parseFloat(product.price) * product.quantity).toFixed(2)}
+              {(parseFloat(product.price) * product.quantity)
+                .toFixed(2)
+                .toString()
+                .replace(/\./, ',')}
             </p>
-            <p data-testid={ `customer_checkout__element-order-table-remove-${ind}` }>
+            <p
+              data-testid={ `customer_checkout__element-order-table-remove-${ind}` }
+            >
               Remover
             </p>
-          </div>))}
+          </div>
+        ))}
         <span data-testid="customer_checkout__element-order-total-price">
           {allCartProducts
-            .reduce((acc, item) => item.quantity * parseFloat(item.price) + acc, 0)
+            .reduce(
+              (acc, item) => item.quantity * parseFloat(item.price) + acc,
+              0,
+            )
             .toFixed(2)
             .replace('.', ',')}
         </span>
       </span>
       <h1>Detalhes e endereço para entrega</h1>
       <span>
-        <select
-          name="select"
-          data-testid="customer_checkout__select-seller"
-        >
+        <select name="select" data-testid="customer_checkout__select-seller">
           <option value="valor1">Valor 1</option>
         </select>
         <input
@@ -71,7 +79,6 @@ export default function Checkout() {
           data-testid="customer_checkout__button-submit-order"
         >
           Finalizar
-
         </button>
       </span>
     </>
