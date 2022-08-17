@@ -12,6 +12,13 @@ export default function Products() {
     baseURL: 'http://localhost:3001/',
   });
 
+  useEffect(() => {
+    window.addEventListener('storage', () => {
+      setTotal(calculateTotal);
+    });
+    const cartLocalStorage = JSON.parse(localStorage.getItem('cart'));
+    if (!cartLocalStorage) localStorage.setItem('cart', '[]');
+  }, []);
   const history = useHistory();
 
   function handleClick() {
@@ -28,11 +35,15 @@ export default function Products() {
     }
   }, []);
 
-  useEffect(() => {
-    window.addEventListener('storage', () => {
-      setTotal(calculateTotal);
-    });
-  }, []);
+  // const btnCart = () => {
+  //   history.push('/customer/checkout');
+  // };
+
+  // useEffect(() => {
+  //   window.addEventListener('storage', () => {
+  //     setTotal(calculateTotal);
+  //   });
+  // }, []);
 
   return (
     <>
@@ -45,7 +56,7 @@ export default function Products() {
         disabled={ !total }
       >
         <span data-testid="customer_products__checkout-bottom-value">
-          {total.toString().replace(/\./, ',')}
+          {total.toFixed(2).toString().replace(/\./, ',')}
         </span>
       </button>
     </>
