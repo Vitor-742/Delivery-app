@@ -7,6 +7,12 @@ export default function Checkout() {
     setCartProducts(JSON.parse(localStorage.getItem('cart')));
   }, []);
 
+  function removeItemFromCart(id) {
+    const cart = allCartProducts.filter((e) => e.id !== id);
+    setCartProducts(cart);
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+
   return (
     <>
       <NavBar />
@@ -42,11 +48,13 @@ export default function Checkout() {
                 .toString()
                 .replace(/\./, ',')}
             </p>
-            <p
+            <button
+              type="button"
+              onClick={ () => removeItemFromCart(product.id) }
               data-testid={ `customer_checkout__element-order-table-remove-${ind}` }
             >
               Remover
-            </p>
+            </button>
           </div>
         ))}
         <span data-testid="customer_checkout__element-order-total-price">

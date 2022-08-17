@@ -8,12 +8,6 @@ export default function CardProduct({
   price = 100,
 }) {
   const [quantity, setQuantity] = useState(0);
-  const updateLS = (quant) => {
-    const cart = JSON.parse(localStorage.getItem('cart'));
-    const cartWithoutItem = cart.filter((i) => i.id !== id);
-    cartWithoutItem.push({ name, quantity: quant, price, id });
-    localStorage.setItem('cart', JSON.stringify(cartWithoutItem));
-  };
 
   function localCart(value) {
     let cart = JSON.parse(localStorage.getItem('cart'));
@@ -33,7 +27,7 @@ export default function CardProduct({
         });
         console.log(cart);
       } else {
-        cart.push({ id, product: name, quantity: value, price });
+        cart.push({ id, name, quantity: value, price });
       }
       localStorage.setItem('cart', JSON.stringify(cart));
     }
@@ -43,7 +37,6 @@ export default function CardProduct({
     if (value >= 0) {
       localCart(value);
       window.dispatchEvent(new Event('storage'));
-      updateLS(value);
       setQuantity(value);
     }
   }
@@ -61,14 +54,6 @@ export default function CardProduct({
       <div>
         <button
           type="button"
-          // onClick={ () => {
-          //   setQuantity((prevValue) => {
-          //     if (prevValue === 0) return 0;
-          //     const updatedValue = prevValue - 1;
-          //     updateLS(updatedValue);
-          //     return updatedValue;
-          //   });
-          // } }
           onClick={ () => handleQuantity(quantity - 1) }
           data-testid={ `customer_products__button-card-rm-item-${id}` }
         >
