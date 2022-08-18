@@ -6,6 +6,7 @@ import CommonRegister from './pages/CommonRegister';
 import Products from './pages/customer/Products';
 import Manage from './pages/admin/Manage';
 import Checkout from './pages/customer/Checkout';
+import OrderDetails from './pages/customer/OrderDetails';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Route exact path="/register" component={ CommonRegister } />
       <Route path="/customer/products" component={ Products } />
       <Route path="/customer/checkout" component={ Checkout } />
+      <Route path="/customer/orders/:id" component={ OrderDetails } />
       <Route path="/admin/manage" component={ Manage } />
     </Switch>
   );
