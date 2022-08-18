@@ -1,4 +1,4 @@
-const { Sales, Products, Users } = require('../database/models');
+const { Products } = require('../database/models');
 
 const getAll = async () => {
   try {
@@ -9,14 +9,14 @@ const getAll = async () => {
   }
 };
 
-const getOrderDetails = async (id) => {
-  console.log('a')
-  const order = await Sales.findOne({where: {id}}, /* {
-    include: [
-      {model: Users, as: 'user', }
-    ]} */
-    )
-  return order
-}
+const getOrderDetails = async () => 
+  // console.log('a')
+  // const order = await Sales.findOne({where: {id}}, /* {
+  //   include: [
+  //     {model: Users, as: 'user', }
+  //   ]} */
+  //   )
+  // return order
+   false;
 
 module.exports = { getAll, getOrderDetails };
