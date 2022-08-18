@@ -31,7 +31,6 @@ export default function CardProduct({
           }
           return e;
         });
-        console.log(cart);
       } else {
         cart.push({ id, product: name, quantity: value, price });
       }

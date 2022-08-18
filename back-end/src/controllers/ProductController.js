@@ -9,4 +9,14 @@ const getAll = async (_req, res, next) => {
   }
 };
 
-module.exports = { getAll };
+const getOrderDetails = async (req, res, next) => {
+  try {
+    const response = await ProductService.getOrderDetails(req.params.id);
+    return res.status(200).json(response)
+  } catch (error) {
+    console.log(error)
+    next(error)
+  }
+}
+
+module.exports = { getAll, getOrderDetails };
