@@ -25,7 +25,6 @@ export default function CardProduct({
           }
           return e;
         });
-        console.log(cart);
       } else {
         cart.push({ id, name, quantity: value, price });
       }

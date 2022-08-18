@@ -9,4 +9,14 @@ const getAll = async () => {
   }
 };
 
-module.exports = { getAll };
+const getOrderDetails = async () => 
+  // console.log('a')
+  // const order = await Sales.findOne({where: {id}}, /* {
+  //   include: [
+  //     {model: Users, as: 'user', }
+  //   ]} */
+  //   )
+  // return order
+   false;
+
+module.exports = { getAll, getOrderDetails };
