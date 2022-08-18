@@ -12,7 +12,7 @@ app.use(express.json());
 app.use('/images', express.static(`${__dirname}/../../public/images`));
 app.use(userRouter);
 app.use(customerRouter);
-app.use(sellerRouter)
+app.use(sellerRouter);
 app.use(errorHandler);
 
 module.exports = app;
