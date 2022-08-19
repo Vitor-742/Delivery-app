@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-
-const MIN_LENGTH_PASSWORD = 5;
-const MIN_LENGTH_NAME = 11;
+import axios from 'axios';
 
 export default function ManageForm() {
   const [inputs, setInputs] = useState({
@@ -11,13 +9,49 @@ export default function ManageForm() {
     role: 'customer',
   });
   const [disabledRegister, setDisableRegister] = useState(false);
+  const [invalidRegister, setInvalidRegister] = useState(false);
+
+  const MIN_LENGTH_PASSWORD = 5;
+  const MIN_LENGTH_NAME = 11;
+  const reg = /\S+@\S+\.\S+/;
+  const validEmail = reg.test(inputs.email);
+  const validPass = inputs.password.length > MIN_LENGTH_PASSWORD;
+  const validName = inputs.name.length > MIN_LENGTH_NAME;
+  const STATUS = 201;
+  const user = localStorage.getItem('user');
+  const corte = 91;
+  const t = user.slice(corte);
+  const token = t.split('"');
+
+  const createUser = async () => {
+    try {
+      setInvalidRegister(true);
+      const { status } = await axios({
+        headers: { Authorization: token[0] },
+        hasToken: true,
+        method: 'post',
+        url: 'http://localhost:3001/admin/manage',
+        data: inputs,
+      });
+      if (status === STATUS) {
+        setInputs({
+          name: '',
+          email: '',
+          password: '',
+          role: 'customer',
+        });
+        return status;
+      }
+    } catch (error) {
+      setInvalidRegister(true);
+    }
+  };
 
   const ableBtnRegister = () => {
-    const reg = /\S+@\S+\.\S+/;
     if (
-      reg.test(inputs.email)
-      && inputs.password.length > MIN_LENGTH_PASSWORD
-      && inputs.name.length > MIN_LENGTH_NAME
+      validName
+      && validEmail
+      && validPass
     ) {
       setDisableRegister(true);
     } else {
@@ -89,9 +123,15 @@ export default function ManageForm() {
         type="button"
         data-testid="admin_manage__button-register"
         disabled={ !disabledRegister }
+        onClick={ async () => createUser() }
       >
         Cadastrar
       </button>
+      {invalidRegister && (
+        <span data-testid="admin_manage__element-invalid-register">
+          Um usuário já existe com esse email!
+        </span>
+      )}
     </div>
   );
 }

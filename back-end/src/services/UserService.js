@@ -41,7 +41,21 @@ const signUp = async (newUser) => {
   return { name: newUser.name, email: newUser.email, role: 'customer', token };
 };
 
+const adminRegister = async (newUser) => {
+  const cryptPass = md5(newUser.password);
+  const createdUser = await Users.create({
+    name: newUser.name,
+    email: newUser.email,
+    password: cryptPass,
+    role: newUser.role,
+  });
+  if (createdUser) {
+    return createdUser;
+  }
+};
+
 module.exports = {
   login,
   signUp,
+  adminRegister,
 };
