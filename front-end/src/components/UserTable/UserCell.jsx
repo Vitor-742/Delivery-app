@@ -1,11 +1,13 @@
 import axios from 'axios';
+import { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { ManagerContext } from '../../pages/admin/Context';
 
 export default function UserCell({
   data: { id, name, email, role },
-  handler,
   index: i,
 }) {
+  const { setUsers } = useContext(ManagerContext);
   const axiosInstance = axios.create({
     baseURL: 'http://localhost:3001/',
   });
@@ -17,7 +19,7 @@ export default function UserCell({
       const { data } = await axiosInstance.delete(`/user/delete/${id}`, {
         headers: { Authorization: user.token },
       });
-      handler(data);
+      setUsers(data);
     } catch (err) {
       console.log(err);
     }
@@ -44,6 +46,5 @@ export default function UserCell({
 
 UserCell.propTypes = {
   data: PropTypes.obj,
-  handler: PropTypes.function,
   index: PropTypes.number,
 }.isRequired;

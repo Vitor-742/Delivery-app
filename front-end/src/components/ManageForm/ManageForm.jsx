@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
+import { ManagerContext } from '../../pages/admin/Context';
 
 export default function ManageForm() {
+  const { getUsers } = useContext(ManagerContext);
   const [inputs, setInputs] = useState({
     name: '',
     email: '',
@@ -42,6 +44,7 @@ export default function ManageForm() {
           password: '',
           role: 'customer',
         });
+        getUsers();
         return status;
       }
     } catch (error) {
