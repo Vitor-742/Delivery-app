@@ -64,10 +64,19 @@ const deleteUserById = async (id) => {
   }
 };
 
+const getSellerById = async (id) => {
+  const sellerById = await Users.findByPk(id);
+  if (sellerById) {
+    return sellerById;
+  }
+  throw errorCreator(404, `No seller with id: ${id}`);
+};
+
 module.exports = {
   login,
   signUp,
   adminRegister,
   getAll,
   deleteUserById,
+  getSellerById,
 };

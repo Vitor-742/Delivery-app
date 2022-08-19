@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import moment from 'moment';
 
 export default function OrderItem({
   data: { id, status, saleDate, totalPrice },
@@ -14,7 +15,7 @@ export default function OrderItem({
     <button type="button" onClick={ handleRedirect }>
       <span data-testid={ `customer_orders__element-order-id-${id}` }>{id}</span>
       <span data-testid={ `customer_orders__element-order-date-${id}` }>
-        {saleDate}
+        {moment(saleDate).format('DD/MM/YYYY')}
       </span>
       <span data-testid={ `customer_orders__element-delivery-status-${id}` }>
         {status}

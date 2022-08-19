@@ -35,8 +35,12 @@ export default function SellerOrders() {
       <ol>
         {order && order.map((item) => (
           <li key={ item.id }>
-            <button type="button" onClick={ () => handleClick(item.id) }>
-              <p data-testid={ `seller_orders__element-order-id-${item.id}` }>
+            <button
+              type="button"
+              data-testid={ `seller_orders__element-order-id-${item.id}` }
+              onClick={ () => handleClick(item.id) }
+            >
+              <p>
                 {item.id}
               </p>
               <p data-testid={ `seller_orders__element-delivery-status-${item.id}` }>

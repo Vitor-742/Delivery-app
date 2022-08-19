@@ -16,8 +16,25 @@ export default function CommonLogin() {
     history.push('/register');
   }
 
-  useEffect(() => {
+  const routeHomePage = () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      switch (user.role) {
+      case 'customer':
+        history.push('/customer/products');
+        break;
+      case 'administrator':
+        history.push('/admin/manage');
+        break;
+      default:
+        history.push('/seller/orders');
+        break;
+      }
+    }
+  };
 
+  useEffect(() => {
+    routeHomePage();
   }, []);
 
   const getUser = async () => {
@@ -29,10 +46,10 @@ export default function CommonLogin() {
         data: inputs,
       });
       localStorage.setItem('user', JSON.stringify({ id, name, email, role, token }));
-      if (status === STATUS_OK && inputs.email === 'adm@deliveryapp.com') {
+      if (status === STATUS_OK && role === 'administrator') {
         history.push('./admin/manage');
-      } else if (status === STATUS_OK && inputs.email !== 'adm@deliveryapp.com') {
-        history.push('./customer/products');
+      } else if (status === STATUS_OK && role === 'seller') {
+        history.push('./seller/orders');
       } else if (status === STATUS_OK) history.push('./customer/products');
     } catch (error) {
       console.log(error);
