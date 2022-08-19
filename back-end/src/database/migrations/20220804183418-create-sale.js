@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      userId: {
+      user_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         onUpdate: "CASCADE",
@@ -19,7 +19,7 @@ module.exports = {
           key: "id",
         },
       },
-      sellerId: {
+      seller_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         onUpdate: "CASCADE",
@@ -29,19 +29,19 @@ module.exports = {
           key: "id",
         },
       },
-      totalPrice: {
+      total_price: {
         allowNull: false,
         type: Sequelize.DECIMAL(9, 2),
       },
-      deliveryAddress: {
+      delivery_address: {
         allowNull: false,
         type: Sequelize.STRING(100),
       },
-      deliveryNumber: {
+      delivery_number: {
         allowNull: false,
         type: Sequelize.STRING(50),
       },
-      saleDate: {
+      sale_date: {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.fn("now"),

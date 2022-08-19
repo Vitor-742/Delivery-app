@@ -1,16 +1,48 @@
+import axios from 'axios';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import NavBar from '../../components/NavBar/NavBar';
 
 export default function Checkout() {
+  const [inputs, setInputs] = useState({ deliveryAddress: '', deliveryNumber: '' });
   const [allCartProducts, setCartProducts] = useState([]);
+
+  const [user, setUser] = useState([]);
+  const axiosInstance = axios.create({
+    baseURL: 'http://localhost:3001/',
+  });
+
+  const history = useHistory();
+
   useState(() => {
     setCartProducts(JSON.parse(localStorage.getItem('cart')));
+    setUser(JSON.parse(localStorage.getItem('user')));
   }, []);
 
   function removeItemFromCart(id) {
     const cart = allCartProducts.filter((e) => e.id !== id);
     setCartProducts(cart);
     localStorage.setItem('cart', JSON.stringify(cart));
+  }
+
+  async function handleSubmit() {
+    const result = await axiosInstance.post(
+      '/customer/checkout',
+      {
+        userId: user.id,
+        sellerId: 2,
+        totalPrice: allCartProducts.reduce(
+          (acc, item) => item.quantity * parseFloat(item.price) + acc,
+          0,
+        ),
+        deliveryAddress: inputs.deliveryAddress,
+        deliveryNumber: inputs.deliveryNumber,
+        products: allCartProducts,
+      },
+      { headers: { Authorization: user.token } },
+    );
+    console.log(result);
+    history.push(`/customer/orders/${result.data.id}`);
   }
 
   return (
@@ -74,16 +106,23 @@ export default function Checkout() {
         </select>
         <input
           type="text"
+          onChange={ (e) => {
+            setInputs({ ...inputs, deliveryAddress: e.target.value });
+          } }
           placeholder="endereço"
           data-testid="customer_checkout__input-address"
         />
         <input
           type="number"
+          onChange={ (e) => {
+            setInputs({ ...inputs, deliveryNumber: e.target.value });
+          } }
           placeholder="numero"
           data-testid="customer_checkout__input-addressNumber"
         />
         <button
           type="button"
+          onClick={ handleSubmit }
           data-testid="customer_checkout__button-submit-order"
         >
           Finalizar
