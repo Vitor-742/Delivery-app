@@ -7,6 +7,13 @@ const userRouter = express.Router();
 
 userRouter.post('/login', UserController.login);
 userRouter.post('/register', userValidator, UserController.signUp);
-userRouter.post('/admin/manage', tokenAuth, userValidator, UserController.adminRegister);
+userRouter.get('/users', tokenAuth, UserController.getAll);
+userRouter.delete('/user/delete/:id', tokenAuth, UserController.deleteUserById);
+userRouter.post(
+  '/admin/manage',
+  tokenAuth,
+  userValidator,
+  UserController.adminRegister,
+);
 
 module.exports = userRouter;
