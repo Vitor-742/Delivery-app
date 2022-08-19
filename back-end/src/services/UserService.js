@@ -1,7 +1,4 @@
 const md5 = require('md5');
-const jwt = require('jsonwebtoken');
-const jwtKey = require('fs')
-  .readFileSync('./jwt.evaluation.key', { encoding: 'utf-8' });
 const newJWT = require('../auth/tokenHandler');
 const { Users } = require('../database/models');
 const errorCreator = require('../helpers/errorCreator');
@@ -10,13 +7,9 @@ const login = async ({ email, password: unCryptPass }) => {
   const password = md5(unCryptPass);
   const loginUser = await Users.findOne({ where: { email, password } });
   if (loginUser) {
-    const { name, role } = loginUser;
-    const secret = jwtKey;    
-    loginUser.dataValues.token = jwt.sign(
-      { name, email, role },
-      secret,
-      { algorithm: 'HS256', expiresIn: '7d' },
-    );
+    const { id, name, role } = loginUser;
+    const tokenPayload = { id, name, email, role };
+    loginUser.dataValues.token = newJWT(tokenPayload);
     return loginUser;
   }
   throw errorCreator(404, 'User Not Found');
@@ -54,8 +47,27 @@ const adminRegister = async (newUser) => {
   }
 };
 
+const getAll = async () => {
+  const loginUser = await Users.findAll();
+  if (loginUser) {
+    return loginUser;
+  }
+  throw errorCreator(404, 'No users on db');
+};
+
+const deleteUserById = async (id) => {
+  try {
+    await Users.destroy({ where: { id } });
+    return getAll();
+  } catch (error) {
+    throw errorCreator(404, `No such user: ${id}`);
+  }
+};
+
 module.exports = {
   login,
   signUp,
   adminRegister,
+  getAll,
+  deleteUserById,
 };

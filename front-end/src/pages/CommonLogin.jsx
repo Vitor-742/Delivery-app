@@ -23,12 +23,12 @@ export default function CommonLogin() {
   const getUser = async () => {
     try {
       console.log(inputs);
-      const { status, data: { name, email, role, token } } = await axios({
+      const { status, data: { id, name, email, role, token } } = await axios({
         method: 'post',
         url: 'http://localhost:3001/login',
         data: inputs,
       });
-      localStorage.setItem('user', JSON.stringify({ name, email, role, token }));
+      localStorage.setItem('user', JSON.stringify({ id, name, email, role, token }));
       if (status === STATUS_OK && inputs.email === 'adm@deliveryapp.com') {
         history.push('./admin/manage');
       } else if (status === STATUS_OK && inputs.email !== 'adm@deliveryapp.com') {

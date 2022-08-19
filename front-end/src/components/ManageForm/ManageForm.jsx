@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
+import { ManagerContext } from '../../pages/admin/Context';
 
 export default function ManageForm() {
+  const { getUsers } = useContext(ManagerContext);
   const [inputs, setInputs] = useState({
     name: '',
     email: '',
@@ -18,21 +20,23 @@ export default function ManageForm() {
   const validPass = inputs.password.length > MIN_LENGTH_PASSWORD;
   const validName = inputs.name.length > MIN_LENGTH_NAME;
   const STATUS = 201;
-  const user = localStorage.getItem('user');
-  const corte = 91;
-  const t = user.slice(corte);
-  const token = t.split('"');
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  const axiosInstance = axios.create({
+    baseURL: 'http://localhost:3001/',
+  });
 
   const createUser = async () => {
     try {
       setInvalidRegister(true);
-      const { status } = await axios({
-        headers: { Authorization: token[0] },
-        hasToken: true,
-        method: 'post',
-        url: 'http://localhost:3001/admin/manage',
-        data: inputs,
-      });
+      const { name, email, password, role } = inputs;
+      const { status } = await axiosInstance.post(
+        '/admin/manage',
+        { name, email, password, role },
+        {
+          headers: { Authorization: user.token },
+        },
+      );
       if (status === STATUS) {
         setInputs({
           name: '',
@@ -40,6 +44,7 @@ export default function ManageForm() {
           password: '',
           role: 'customer',
         });
+        getUsers();
         return status;
       }
     } catch (error) {
@@ -48,11 +53,7 @@ export default function ManageForm() {
   };
 
   const ableBtnRegister = () => {
-    if (
-      validName
-      && validEmail
-      && validPass
-    ) {
+    if (validName && validEmail && validPass) {
       setDisableRegister(true);
     } else {
       setDisableRegister(false);

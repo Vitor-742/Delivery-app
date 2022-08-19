@@ -8,6 +8,8 @@ import Manage from './pages/admin/Manage';
 import Checkout from './pages/customer/Checkout';
 import SellerOrders from './pages/seller/SellerOrders';
 import OrderDetails from './pages/customer/OrderDetails';
+import OrdersList from './pages/customer/OrdersList';
+import ManagerContextProvider from './pages/admin/Context';
 
 function App() {
   return (
@@ -21,8 +23,11 @@ function App() {
       <Route path="/customer/products" component={ Products } />
       <Route path="/customer/checkout" component={ Checkout } />
       <Route path="/seller/orders" component={ SellerOrders } />
+      <Route path="/customer/orders" component={ OrdersList } />
       <Route path="/customer/orders/:id" component={ OrderDetails } />
-      <Route path="/admin/manage" component={ Manage } />
+      <ManagerContextProvider>
+        <Route path="/admin/manage" component={ Manage } />
+      </ManagerContextProvider>
     </Switch>
   );
 }
