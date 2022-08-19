@@ -29,4 +29,23 @@ const adminRegister = async (req, res, next) => {
   }
 };
 
-module.exports = { login, signUp, adminRegister };
+const getAll = async (_req, res, next) => {
+  try {
+    const response = await UserService.getAll();
+    return res.status(200).json(response);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const deleteUserById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const response = await UserService.deleteUserById(id);
+    return res.status(200).json(response);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { login, signUp, adminRegister, getAll, deleteUserById };
