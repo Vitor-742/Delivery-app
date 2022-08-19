@@ -47,8 +47,27 @@ const adminRegister = async (newUser) => {
   }
 };
 
+const getAll = async () => {
+  const loginUser = await Users.findAll();
+  if (loginUser) {
+    return loginUser;
+  }
+  throw errorCreator(404, 'No users on db');
+};
+
+const deleteUserById = async (id) => {
+  try {
+    await Users.destroy({ where: { id } });
+    return getAll();
+  } catch (error) {
+    throw errorCreator(404, `No such user: ${id}`);
+  }
+};
+
 module.exports = {
   login,
   signUp,
   adminRegister,
+  getAll,
+  deleteUserById,
 };
