@@ -1,9 +1,12 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import NavBar from '../../components/NavBar/NavBar';
 
 export default function OrderDetails() {
-  const [order, setOrder] = useState([]);
+  const [order, setOrder] = useState({});
+  const [products, setProducts] = useState([]);
+
   const { id } = useParams();
   const axiosInstance = axios.create({
     baseURL: 'http://localhost:3001/',
@@ -12,7 +15,9 @@ export default function OrderDetails() {
   const getOrderDetails = async () => {
     try {
       const { data } = await axiosInstance.get(`/customer/orders/${id}`);
-      setOrder(data);
+      console.log(data.order);
+      setOrder(data.order);
+      setProducts(data.products);
     } catch (error) {
       console.log(error);
     }
@@ -55,15 +60,16 @@ export default function OrderDetails() {
           >
             entregue
           </p>
-          <p
+          <button
+            type="button"
             data-testid="customer_order_details__button-delivery-check"
           >
             marcar como entregue
-          </p>
+          </button>
         </div>
         <div>
           <ul>
-            {order.map((item, ind) => (
+            {products.map((item, ind) => (
               <li key={ ind }>
                 <p
                   data-testid={ `${ID_ITEM_NUMBER}-${ind}` }
@@ -73,7 +79,7 @@ export default function OrderDetails() {
                 <p
                   data-testid={ `${ID_NAME_ITEM}-${ind}` }
                 >
-                  {item.name}
+                  {item.product.name}
                 </p>
                 <p
                   data-testid={ `${ID_QUANTITY_ITEM}-${ind}` }
@@ -83,21 +89,19 @@ export default function OrderDetails() {
                 <p
                   data-testid={ `${ID_PRICE_ITEM}-${ind}` }
                 >
-                  {item.price}
+                  {item.product.price}
                 </p>
                 <p
                   data-testid={ `${ID_SUBTOTAL}-${ind}` }
                 >
-                  {parseFloat(item.price) * item.quantity}
+                  {parseFloat(item.product.price) * item.quantity}
                 </p>
               </li>))}
           </ul>
         </div>
         <p>
           {
-            order
-              .reduce((acc, item) => parseFloat(item.price) * item.quantity + acc)
-              .toFixed(2)
+            order.totalPrice
           }
         </p>
       </span>

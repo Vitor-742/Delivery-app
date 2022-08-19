@@ -15,7 +15,9 @@ function App() {
   return (
     <Switch>
       <Route path="/" exact>
-        <Redirect to="/login" />
+        <Redirect
+          to="/login"
+        />
         <CommonLogin />
       </Route>
       <Route path="/login" component={ CommonLogin } />
@@ -23,8 +25,8 @@ function App() {
       <Route path="/customer/products" component={ Products } />
       <Route path="/customer/checkout" component={ Checkout } />
       <Route path="/seller/orders" component={ SellerOrders } />
-      <Route path="/customer/orders" component={ OrdersList } />
       <Route path="/customer/orders/:id" component={ OrderDetails } />
+      <Route path="/customer/orders" component={ OrdersList } />
       <ManagerContextProvider>
         <Route path="/admin/manage" component={ Manage } />
       </ManagerContextProvider>
