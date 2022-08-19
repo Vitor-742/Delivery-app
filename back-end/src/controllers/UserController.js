@@ -20,4 +20,13 @@ const signUp = async (req, res, next) => {
   }
 };
 
-module.exports = { login, signUp };
+const adminRegister = async (req, res, next) => {
+  try {
+    const response = await UserService.adminRegister(req.body);
+    return res.status(201).json(response);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { login, signUp, adminRegister };
