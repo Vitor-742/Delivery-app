@@ -10,10 +10,10 @@ const login = async ({ email, password: unCryptPass }) => {
   const password = md5(unCryptPass);
   const loginUser = await Users.findOne({ where: { email, password } });
   if (loginUser) {
-    const { name, role } = loginUser;
+    const { id, name, role } = loginUser;
     const secret = jwtKey;    
     loginUser.dataValues.token = jwt.sign(
-      { name, email, role },
+      { id, name, email, role },
       secret,
       { algorithm: 'HS256', expiresIn: '7d' },
     );
