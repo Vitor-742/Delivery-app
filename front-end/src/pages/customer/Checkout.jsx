@@ -1,16 +1,47 @@
+import axios from 'axios';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import NavBar from '../../components/NavBar/NavBar';
 
 export default function Checkout() {
   const [allCartProducts, setCartProducts] = useState([]);
+
+  const [user, setUser] = useState([]);
+  const axiosInstance = axios.create({
+    baseURL: 'http://localhost:3001/',
+  });
+
+  const history = useHistory();
+
   useState(() => {
     setCartProducts(JSON.parse(localStorage.getItem('cart')));
+    setUser(JSON.parse(localStorage.getItem('user')));
   }, []);
 
   function removeItemFromCart(id) {
     const cart = allCartProducts.filter((e) => e.id !== id);
     setCartProducts(cart);
     localStorage.setItem('cart', JSON.stringify(cart));
+  }
+
+  async function handleSubmit() {
+    const result = await axiosInstance.post(
+      '/customer/checkout',
+      {
+        userId: 3,
+        sellerId: 2,
+        totalPrice: allCartProducts.reduce(
+          (acc, item) => item.quantity * parseFloat(item.price) + acc,
+          0,
+        ),
+        deliveryAddress: 'Rua das Rosas, 37',
+        deliveryNumber: '123456',
+        products: allCartProducts,
+      },
+      { headers: { Authorization: user.token } },
+    );
+    console.log(result);
+    history.push(`/customer/orders/${result.data.id}`);
   }
 
   return (
@@ -84,6 +115,7 @@ export default function Checkout() {
         />
         <button
           type="button"
+          onClick={ handleSubmit }
           data-testid="customer_checkout__button-submit-order"
         >
           Finalizar

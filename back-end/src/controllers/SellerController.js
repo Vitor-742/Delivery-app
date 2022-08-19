@@ -1,5 +1,14 @@
 const SellerService = require('../services/SellerService');
 
+const createSale = async (req, res, next) => {
+  try {
+    const result = await SellerService.createSale(req.body);
+    return res.status(201).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const getSales = async (req, res, next) => {
   try {
     const response = await SellerService.getSales();
@@ -29,4 +38,4 @@ const getSalesBySellerId = async (req, res, next) => {
   }
 };
 
-module.exports = { getSales, getSalesByUserId, getSalesBySellerId };
+module.exports = { createSale, getSales, getSalesByUserId, getSalesBySellerId };
