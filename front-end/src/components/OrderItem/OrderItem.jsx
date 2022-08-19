@@ -15,7 +15,7 @@ export default function OrderItem({
     <button type="button" onClick={ handleRedirect }>
       <span data-testid={ `customer_orders__element-order-id-${id}` }>{id}</span>
       <span data-testid={ `customer_orders__element-order-date-${id}` }>
-        {moment(saleDate).locale('pt-br').format('L')}
+        {moment(saleDate).format('DD/MM/YYYY')}
       </span>
       <span data-testid={ `customer_orders__element-delivery-status-${id}` }>
         {status}
