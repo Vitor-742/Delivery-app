@@ -16,7 +16,7 @@ export default function OrdersList() {
   const getOrdersFromUser = async () => {
     const user = JSON.parse(localStorage.getItem('user'));
     try {
-      const { data } = await axiosInstance.get(`/customer/orders/${user.id}`);
+      const { data } = await axiosInstance.get(`/user/orders/${user.id}`);
       setOrders(data);
     } catch (err) {
       if (error.message.includes('401')) {
