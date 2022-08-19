@@ -14,7 +14,7 @@ const tokenAuth = (req, _res, next) => {
     jwt.verify(token, JWT_SECRET);
     next();
   } catch (err) {
-    next({ status: 401, message: 'Token must be a valid' });
+    next({ status: 401, message: 'Token must be valid' });
   }
 };
 
