@@ -1,19 +1,25 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import NavBar from '../../components/NavBar/NavBar';
 
 export default function OrderDetails() {
   const [order, setOrder] = useState([]);
+  const { id } = useParams();
   const axiosInstance = axios.create({
     baseURL: 'http://localhost:3001/',
   });
-  useState(() => {
+
+  const getOrderDetails = async () => {
     try {
-      axiosInstance.get('/customer/orders/:id').then((resolve) => {
-        setOrder(resolve);
-      });
+      const { data } = await axiosInstance.get(`/customer/orders/${id}`);
+      setOrder(data);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  useState(() => {
+    getOrderDetails();
   }, []);
 
   const ID_STATUS = 'customer_order_details__element-order-details-label-delivery-status';
