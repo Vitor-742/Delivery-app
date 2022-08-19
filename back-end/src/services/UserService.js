@@ -1,7 +1,4 @@
 const md5 = require('md5');
-const jwt = require('jsonwebtoken');
-const jwtKey = require('fs')
-  .readFileSync('./jwt.evaluation.key', { encoding: 'utf-8' });
 const newJWT = require('../auth/tokenHandler');
 const { Users } = require('../database/models');
 const errorCreator = require('../helpers/errorCreator');
@@ -11,12 +8,8 @@ const login = async ({ email, password: unCryptPass }) => {
   const loginUser = await Users.findOne({ where: { email, password } });
   if (loginUser) {
     const { id, name, role } = loginUser;
-    const secret = jwtKey;    
-    loginUser.dataValues.token = jwt.sign(
-      { id, name, email, role },
-      secret,
-      { algorithm: 'HS256', expiresIn: '7d' },
-    );
+    const tokenPayload = { id, name, email, role };
+    loginUser.dataValues.token = newJWT(tokenPayload);
     return loginUser;
   }
   throw errorCreator(404, 'User Not Found');
