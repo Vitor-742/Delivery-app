@@ -5,10 +5,12 @@ module.exports = (sequelize, DataTypes) => {
       saleId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+        field: "sale_id",
       },
       productId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+        field: "product_id",
       },
       quantity: {
         type: DataTypes.INTEGER,
@@ -16,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       timestamps: false,
-      tableName: "salesProducts",
+      tableName: "sales_products",
     }
   );
 
