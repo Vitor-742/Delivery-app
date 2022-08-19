@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment';
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import NavBar from '../../components/NavBar/NavBar';
@@ -6,6 +7,7 @@ import NavBar from '../../components/NavBar/NavBar';
 export default function OrderDetails() {
   const [order, setOrder] = useState({});
   const [products, setProducts] = useState([]);
+  const [seller, setSeller] = useState({});
 
   const { id } = useParams();
   const axiosInstance = axios.create({
@@ -15,9 +17,9 @@ export default function OrderDetails() {
   const getOrderDetails = async () => {
     try {
       const { data } = await axiosInstance.get(`/customer/orders/${id}`);
-      console.log(data.order);
       setOrder(data.order);
       setProducts(data.products);
+      setSeller(data.seller);
     } catch (error) {
       console.log(error);
     }
@@ -43,25 +45,26 @@ export default function OrderDetails() {
           <p
             data-testid="customer_order_details__element-order-details-label-order-id"
           >
-            pedido
+            {order.id}
           </p>
           <p
             data-testid="customer_order_details__element-order-details-label-seller-name"
           >
-            vendedor
+            {seller.name}
           </p>
           <p
             data-testid="customer_order_details__element-order-details-label-order-date"
           >
-            data
+            {moment(order.saleDate).format('DD/MM/YYYY')}
           </p>
           <p
             data-testid={ ID_STATUS }
           >
-            entregue
+            {order.status}
           </p>
           <button
             type="button"
+            disabled={ order.status !== 'Em Trânsito' }
             data-testid="customer_order_details__button-delivery-check"
           >
             marcar como entregue
@@ -99,9 +102,9 @@ export default function OrderDetails() {
               </li>))}
           </ul>
         </div>
-        <p>
+        <p data-testid="customer_order_details__element-order-total-price">
           {
-            order.totalPrice
+            order.totalPrice.replace(/\./, ',')
           }
         </p>
       </span>
