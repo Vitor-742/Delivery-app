@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import NavBar from '../../components/NavBar/NavBar';
 
 export default function Checkout() {
+  const [inputs, setInputs] = useState({ deliveryAddress: '', deliveryNumber: '' });
   const [allCartProducts, setCartProducts] = useState([]);
 
   const [user, setUser] = useState([]);
@@ -34,8 +35,8 @@ export default function Checkout() {
           (acc, item) => item.quantity * parseFloat(item.price) + acc,
           0,
         ),
-        deliveryAddress: 'Rua das Rosas, 37',
-        deliveryNumber: '123456',
+        deliveryAddress: inputs.deliveryAddress,
+        deliveryNumber: inputs.deliveryNumber,
         products: allCartProducts,
       },
       { headers: { Authorization: user.token } },
@@ -105,11 +106,17 @@ export default function Checkout() {
         </select>
         <input
           type="text"
+          onChange={ (e) => {
+            setInputs({ ...inputs, deliveryAddress: e.target.value });
+          } }
           placeholder="endereço"
           data-testid="customer_checkout__input-address"
         />
         <input
           type="number"
+          onChange={ (e) => {
+            setInputs({ ...inputs, deliveryNumber: e.target.value });
+          } }
           placeholder="numero"
           data-testid="customer_checkout__input-addressNumber"
         />
