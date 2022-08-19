@@ -28,7 +28,7 @@ export default function Checkout() {
     const result = await axiosInstance.post(
       '/customer/checkout',
       {
-        userId: 3,
+        userId: user.id,
         sellerId: 2,
         totalPrice: allCartProducts.reduce(
           (acc, item) => item.quantity * parseFloat(item.price) + acc,
