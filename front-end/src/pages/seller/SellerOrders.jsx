@@ -1,19 +1,29 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import NavBar from '../../components/NavBar/NavBar';
 
 export default function SellerOrders() {
-  const [order, setOrder] = useState([]);
+  const [order, setOrders] = useState([]);
+  const history = useHistory();
   const axiosInstance = axios.create({
     baseURL: 'http://localhost:3001/',
   });
 
-  useEffect(() => {
-    axiosInstance.get('/seller/orders').then((response) => {
-      setOrder(response);
-    });
-  }, []);
+  const getOrdersFromSeller = async () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user.role !== 'seller') history.push('/login');
+    try {
+      const { data } = await axiosInstance.get(`/seller/orders/${user.id}`);
+      setOrders(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  const history = useHistory();
+  useEffect(() => {
+    getOrdersFromSeller();
+  }, []);
 
   const handleClick = (id) => {
     history.push(`seller/orders/${id}`);
@@ -23,7 +33,7 @@ export default function SellerOrders() {
     <>
       <NavBar />
       <ol>
-        {order.map((item) => (
+        {order && order.map((item) => (
           <li key={ item.id }>
             <button type="button" onClick={ () => handleClick(item.id) }>
               <p data-testid={ `seller_orders__element-order-id-${item.id}` }>
@@ -36,7 +46,7 @@ export default function SellerOrders() {
                 {item.saleDate}
               </p>
               <p data-testid={ `seller_orders__element-card-price-${item.id}` }>
-                {item.totalPrice}
+                {item.totalPrice.replace('.', ',')}
               </p>
               <p data-testid={ `seller_orders__element-card-address-${item.id}` }>
                 {item.deliveryAddress}
